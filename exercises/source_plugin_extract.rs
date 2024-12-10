@@ -12,20 +12,7 @@ use std::io::Write;
 
 struct RandomGenPlugin;
 
-impl RandomGenPlugin {
-    /// # Reads the raw event payload and converts it to u64 value.
-    ///
-    fn extract_number(&mut self, req: ExtractRequest<Self>) -> Result<u64, Error> {
-        let event = req.event.event()?;
-        let event = event.load::<PluginEvent>()?;
-        let buf = event
-            .params
-            .event_data
-            .ok_or_else(|| anyhow!("Missing event data"))?;
-        Ok(u64::from_le_bytes(buf.try_into()?))
-    }
-}
-
+/// Plugin metadata
 impl Plugin for RandomGenPlugin {
     const NAME: &'static CStr = c"random_generator";
     const PLUGIN_VERSION: &'static CStr = c"0.0.0";
@@ -42,8 +29,10 @@ impl Plugin for RandomGenPlugin {
     }
 }
 
+/// Plugin instance
 struct RandomGenPluginInstance;
 
+/// Implement SourcePluginInstance and generate the events
 impl SourcePluginInstance for RandomGenPluginInstance {
     type Plugin = RandomGenPlugin;
 
@@ -54,7 +43,6 @@ impl SourcePluginInstance for RandomGenPluginInstance {
     ///
     /// For performance, events are returned in batches. Of course, it's entirely valid to have
     /// just a single event in a batch.
-    ///
     fn next_batch(
         &mut self,
         _plugin: &mut Self::Plugin,
@@ -73,6 +61,7 @@ impl SourcePluginInstance for RandomGenPluginInstance {
     }
 }
 
+/// Event sourcing capability
 impl SourcePlugin for RandomGenPlugin {
     type Instance = RandomGenPluginInstance;
     const EVENT_SOURCE: &'static CStr = c"random_generator";
@@ -102,6 +91,23 @@ impl SourcePlugin for RandomGenPlugin {
     }
 }
 
+impl RandomGenPlugin {
+    /// Reads the raw event payload and converts it to u64 value.
+    fn extract_number(&mut self, req: ExtractRequest<Self>) -> Result<u64, Error> {
+        let event = req.event.event()?;
+        let event = event.load::<PluginEvent>()?;
+        let buf = event
+            .params
+            .event_data
+            .ok_or_else(|| anyhow!("Missing event data"))?;
+        Ok(u64::from_le_bytes(buf.try_into()?))
+    }
+}
+
+/// Implement the field extraction capability
+/// https://falco.org/docs/plugins/architecture/#field-extraction-capability
+/// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/extract/trait.ExtractPlugin.html
+///
 /// This trait exposes a set of items that need to be satisifed
 ///
 /// # The set of event types supported by this plugin
@@ -115,7 +121,7 @@ impl SourcePlugin for RandomGenPlugin {
 /// # The extraction context
 /// # The actual list of extractable fields
 impl ExtractPlugin for RandomGenPlugin {
-    // TODO: Add missing trait items
+    // TODO: Add missing trait items. Check the test below for the expected behavior.
 }
 
 static_plugin!(MY_SOURCE_PLUGIN = RandomGenPlugin);
@@ -124,9 +130,6 @@ fn main() {
     // just needed to build the exercise
 }
 
-// These are the tests your plugin needs to pass. For now, we have just one: it should
-// successfully load into the test harness (emulating Falco plugin API) and return EOF
-// without generating any events
 mod tests {
     use exercises::native::NativeTestDriver;
     use exercises::{init_plugin, CapturingTestDriver, TestDriver};
