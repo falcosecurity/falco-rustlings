@@ -51,7 +51,7 @@ impl SourcePlugin for MySourcePlugin {
     const PLUGIN_ID: u32 = 999;
 
     // Create a new instance
-    fn open(&mut self, params: Option<&str>) -> Result<Self::Instance, Error> {
+    fn open(&mut self, _params: Option<&str>) -> Result<Self::Instance, Error> {
         todo!()
     }
 
@@ -102,8 +102,8 @@ impl SourcePluginInstance for MySourceInstance {
 
     fn next_batch(
         &mut self,
-        plugin: &mut Self::Plugin,
-        batch: &mut EventBatch,
+        _plugin: &mut Self::Plugin,
+        _batch: &mut EventBatch,
     ) -> Result<(), Error> {
         // TODO: return EOF
         todo!()
