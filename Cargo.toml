@@ -5,6 +5,8 @@ bin = [
   { name = "your_first_plugin_sol", path = "solutions/your_first_plugin.rs" },
   { name = "source_plugin_01", path = "exercises/source_plugin_01.rs" },
   { name = "source_plugin_01_sol", path = "solutions/source_plugin_01.rs" },
+  { name = "source_plugin_yielding_events", path = "exercises/source_plugin_yielding_events.rs" },
+  { name = "source_plugin_yielding_events_sol", path = "solutions/source_plugin_yielding_events.rs" },
 ]
 
 [package]
@@ -16,3 +18,4 @@ publish = false
 [dependencies]
 falco_plugin = { git = "https://github.com/falcosecurity/plugin-sdk-rs" }
 falco_plugin_runner = { git = "https://github.com/falcosecurity/plugin-sdk-rs" }
+rand = "0.8.5"

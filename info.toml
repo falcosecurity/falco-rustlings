@@ -43,3 +43,8 @@ hint = """Implement all the missing constants (and the constructor method) for y
 name = "source_plugin_01"
 hint = """Implement an instance type and connect it to your source plugin. Make sure the tests pass"""
 test = true
+
+[[exercises]]
+name = "source_plugin_yielding_events"
+hint = """Make the source plugin emit a continuous stream of random numbers"""
+test = true
