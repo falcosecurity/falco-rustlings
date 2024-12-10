@@ -48,3 +48,8 @@ test = true
 name = "source_plugin_yielding_events"
 hint = """Make the source plugin emit a continuous stream of random numbers"""
 test = true
+
+[[exercises]]
+name = "source_plugin_extract"
+hint = """Implement source plugin extraction capability"""
+test = true
