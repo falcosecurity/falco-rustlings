@@ -2,7 +2,7 @@ use falco_plugin::anyhow::{bail, Error};
 use falco_plugin::base::Plugin;
 use falco_plugin::event::events::types::PPME_PLUGINEVENT_E;
 use falco_plugin::extract::EventInput;
-use falco_plugin::source::{SourcePlugin, SourcePluginInstance};
+use falco_plugin::source::{EventBatch, SourcePlugin, SourcePluginInstance};
 use falco_plugin::static_plugin;
 use falco_plugin::strings::CStringWriter;
 use falco_plugin::tables::TablesInput;
@@ -21,10 +21,13 @@ impl Plugin for MySourcePlugin {
     const CONTACT: &'static CStr = c"https://github.com/falcosecurity/plugin-sdk-rs";
     type ConfigType = ();
 
-    fn new(input: Option<&TablesInput>, config: Self::ConfigType) -> Result<Self, Error> {
+    fn new(_input: Option<&TablesInput>, _config: Self::ConfigType) -> Result<Self, Error> {
         Ok(Self)
     }
 }
+
+// An instance of our event source; this one doesn't need any state yet either
+struct MySourceInstance;
 
 // Add event sourcing capability to our plugin
 //
@@ -55,14 +58,16 @@ impl SourcePlugin for MySourcePlugin {
     // Provide a string representation of an event
     //
     // Whenever you use %evt.plugininfo in your Falco rules, this method will be called
-    // to render your event as a string. Non-syscall sources are limited to emitting
-    // PPME_PLUGINEVENT_E events only, which have two fields:
+    // to render your event as a string.
+    // Non-syscall sources are limited to emitting PPME_PLUGINEVENT_E events only, which have two fields:
     // - plugin_id, which is just our plugin id, as defined above
     // - event_data, which is an arbitrary byte buffer
     //
     // It's entirely up to you how you use the event_data field: it can be a (C-style)
     // string, a serialized data structure (JSON, bitcode, or anything else) etc.
     // In this example, we assume it's just a string.
+    // If %evt.plugininfo doesn't ring any bell, check:
+    // https://falco.org/docs/reference/rules/supported-fields/#field-class-evt
     fn event_to_string(&mut self, event: &EventInput) -> Result<CString, Error> {
         // Make sure we have a plugin event and parse it into individual fields
         let event = event.event()?;
@@ -88,13 +93,21 @@ impl SourcePlugin for MySourcePlugin {
     }
 }
 
-// An instance of our event source; this one doesn't need any state yet either
-struct MySourceInstance;
-
-// Now let's make this struct an actual source plugin instance type. For now, we want
-// our plugin to exit immediately without generating any events, by returning Err(FailureReason::Eof)?
+// Now let's make this struct an actual source plugin instance type.
+// For now, we want our plugin to exit immediately without generating any events,
+// by returning Err(FailureReason::Eof)?
 impl SourcePluginInstance for MySourceInstance {
-    // TODO: fill this out
+    // The plugin type
+    type Plugin = todo!();
+
+    fn next_batch(
+        &mut self,
+        plugin: &mut Self::Plugin,
+        batch: &mut EventBatch,
+    ) -> Result<(), Error> {
+        // TODO: return EOF
+        todo!()
+    }
 }
 
 static_plugin!(MY_SOURCE_PLUGIN = MySourcePlugin);
