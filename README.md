@@ -1,7 +1,27 @@
-# Rustlings 🦀
+# Falco Plugin Rust SDK - Rustlings Rustlings 🦀
 
-Welcome to these third-party Rustlings exercises 😃
+## Introduction
 
-First, [install Rustlings using the official instructions](https://github.com/rust-lang/rustlings) ✅
+The [Falco Plugin Rust SDK](https://github.com/falcosecurity/plugin-sdk-rs/) allows you to write custom plugins for [Falco](https://falco.org/), an open-source runtime security tool.
 
-Then, clone this repository, open a terminal in this directory and run `rustlings` to get started with the exercises 🚀
+The goal of this project is to walk you through the [Falco Plugin architecture](https://falco.org/docs/plugins/architecture/) and help you get started with writing plugins using the Rust SDK.
+
+### The Rustlings project
+
+This repository has been set up as third-party Rustlings exercises.
+Rustlings is a project that teaches you interactively, with small exercises that you can complete in your own time.
+
+Follow the official instructions](https://github.com/rust-lang/rustlings) to install Rustlings, then clone this repository, open a terminal in this directory and run `rustlings` to get started with the exercises 🚀
+
+## Exercises
+
+The exercises are designed to be completed in order, with each one building on concepts from the previous ones. If you get stuck, refer to the resources section for help.
+
+## Resources
+|                                     |                                                                       |
+| ----------------------------------- | --------------------------------------------------------------------- |
+| Falco Documentation                 | https://falco.org/docs/                                               |
+| Falco Plugin Architecture           | https://falco.org/docs/plugins/architecture/                          |
+| Falco Plugin Rust SDK               | https://github.com/falcosecurity/plugin-sdk-rs/                       |
+| Falco Plugin Rust SDK Documentation | https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/index.html |
+| Journald plugin for Falco           | https://github.com/gnosek/falco-journald-plugin                       |
