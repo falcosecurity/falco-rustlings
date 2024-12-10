@@ -1,5 +1,7 @@
 # Don't edit the `bin` list manually! It is updated by `rustlings dev update`
-bin = []
+bin = [
+  { name = "building_the_sdk_just_a_moment_please", path = "exercises/building_the_sdk_just_a_moment_please.rs" },
+]
 
 [package]
 name = "exercises"
@@ -8,3 +10,4 @@ edition = "2021"
 publish = false
 
 [dependencies]
+falco_plugin = { git = "https://github.com/falcosecurity/plugin-sdk-rs" }
