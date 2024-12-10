@@ -1,6 +1,8 @@
-use std::ffi::CStr;
+use falco_plugin::anyhow::Error;
 use falco_plugin::base::Plugin;
 use falco_plugin::static_plugin;
+use falco_plugin::tables::TablesInput;
+use std::ffi::CStr;
 
 // This is the type that represents your first plugin. It does not have any fields,
 // because we do not need to store any state yet.
@@ -34,7 +36,10 @@ impl Plugin for NoOpPlugin {
 // a plugin that cannot do anything (because that's all we know how to do for now!).
 // Such a plugin will cause an error if you try to load it into Falco, so by default
 // the SDK will raise an error if your plugin does not have any capabilities.
-static_plugin!(#[no_capabilities] NO_OP_PLUGIN = NoOpPlugin);
+static_plugin!(
+    #[no_capabilities]
+    NO_OP_PLUGIN = NoOpPlugin
+);
 
 fn main() {
     // just needed to build the exercise
