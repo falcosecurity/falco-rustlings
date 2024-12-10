@@ -34,3 +34,7 @@ name = "building_the_sdk_just_a_moment_please"
 
 # A multi-line hint to be shown to users on request.
 hint = """No hints here, if this exercise doesn't pass automatically, please report a bug"""
+
+[[exercises]]
+name = "your_first_plugin"
+hint = """Implement all the missing constants (and the constructor method) for your plugin"""
