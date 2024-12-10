@@ -11,6 +11,7 @@ struct NoOpPlugin;
 //
 // All the string constants you need to provide are C-style strings, so you need
 // to use the c"foo" syntax for them.
+// See: https://doc.rust-lang.org/edition-guide/rust-2021/c-string-literals.html
 //
 // As our plugin does not support configuration right now, use the empty tuple () as ConfigType
 //
