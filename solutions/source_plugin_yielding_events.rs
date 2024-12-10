@@ -95,8 +95,7 @@ fn main() {
 }
 
 // These are the tests your plugin needs to pass. For now, we have just one: it should
-// successfully load into the test harness (emulating Falco plugin API) and return EOF
-// without generating any events
+// successfully load into the test harness (emulating Falco plugin API) and get a valid event
 mod tests {
     use exercises::native::NativeTestDriver;
     use exercises::{CapturingTestDriver, TestDriver};
