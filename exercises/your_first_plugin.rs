@@ -13,6 +13,9 @@ struct NoOpPlugin;
 // to use the c"foo" syntax for them.
 //
 // As our plugin does not support configuration right now, use the empty tuple () as ConfigType
+//
+// You may want to check the documentation for the Plugin trait:
+// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/base/trait.Plugin.html
 impl Plugin for NoOpPlugin {
     // TODO: add missing items
 }
