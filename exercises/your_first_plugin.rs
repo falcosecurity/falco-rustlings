@@ -1,5 +1,8 @@
+use std::ffi::CStr;
+use falco_plugin::anyhow;
 use falco_plugin::base::Plugin;
 use falco_plugin::static_plugin;
+use falco_plugin::tables::TablesInput;
 
 // This is the type that represents your first plugin. It does not have any fields,
 // because we do not need to store any state yet.
