@@ -68,7 +68,7 @@ impl SourcePluginInstance for RandomGenPluginInstance {
 
         let event = num.to_le_bytes().to_vec();
 
-        // Add the encoded u32 value to the batch
+        // Add the encoded u64 value to the batch
         let event = Self::plugin_event(&event);
         batch.add(event)?;
 

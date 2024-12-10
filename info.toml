@@ -72,6 +72,11 @@ more information head to https://falcosecurity.github.io/plugin-sdk-rs/falco_plu
 """
 
 [[exercises]]
+name = "event_parsing"
+hint = """Implement event parsing capability"""
+test = true
+
+[[exercises]]
 name = "syscall_extract_plugin"
 hint = """Implement an extract plugin that handles system call events. Make sure the tests pass"""
 test = true
