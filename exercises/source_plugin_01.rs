@@ -9,6 +9,9 @@ use falco_plugin::tables::TablesInput;
 use std::ffi::{CStr, CString};
 use std::io::Write;
 
+// You may want to check the documentation for Source Plugins at
+// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/source/
+
 // This is the type that represents your first plugin. It does not have any fields,
 // because we do not need to store any state yet.
 struct MySourcePlugin;

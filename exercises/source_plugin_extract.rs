@@ -12,6 +12,9 @@ use std::io::Write;
 
 struct RandomGenPlugin;
 
+// You may want to check the documentation for Field Extraction at
+// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/extract/
+
 /// Plugin metadata
 impl Plugin for RandomGenPlugin {
     const NAME: &'static CStr = c"random_generator";
