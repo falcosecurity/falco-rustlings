@@ -38,3 +38,8 @@ hint = """No hints here, if this exercise doesn't pass automatically, please rep
 [[exercises]]
 name = "your_first_plugin"
 hint = """Implement all the missing constants (and the constructor method) for your plugin"""
+
+[[exercises]]
+name = "source_plugin_01"
+hint = """Implement an instance type and connect it to your source plugin. Make sure the tests pass"""
+test = true
