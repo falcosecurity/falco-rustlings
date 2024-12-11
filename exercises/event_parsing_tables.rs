@@ -16,6 +16,13 @@ use std::ffi::{CStr, CString};
 use std::io::Write;
 use std::sync::Arc;
 
+//
+// INTRO:
+// The scope of this exercise is to introduce you to the state tables:
+// https://falco.org/docs/reference/plugins/plugin-api-reference/#state-tables-api
+// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/tables/index.html
+//
+
 // Tables are a mechanism to share data between plugins. A table has a key type
 // (an integer, string or similar) and a value type, which is a struct type.
 //
@@ -32,6 +39,7 @@ struct HistogramEntry {
 /// We use a longer path, rather than importing the Table type
 /// directly, because we'll also want to *import* this table
 /// from another plugin, and this comes with its own Table type
+/// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/tables/export/struct.Table.html
 type ExportedHistogramTable = export::Table<u64, HistogramEntry>;
 
 struct RandomGenPlugin {
@@ -193,6 +201,7 @@ impl ParsePlugin for RandomGenPlugin {
 type ImportedHistogramTable = import::Table<u64, ImportedHistogramEntry>;
 type ImportedHistogramEntry = import::Entry<Arc<ImportedHistogramMetadata>>;
 
+// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/tables/import/index.html
 #[derive(TableMetadata)]
 #[entry_type(ImportedHistogramEntry)]
 struct ImportedHistogramMetadata {
