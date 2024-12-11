@@ -3,6 +3,8 @@ use std::ffi::CStr;
 pub mod native;
 
 pub mod common;
+pub mod syscall_source_plugin;
+
 pub use common::*;
 
 pub fn init_plugin<D: TestDriver>(

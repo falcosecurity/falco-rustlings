@@ -60,3 +60,8 @@ test = true
 name = "source_plugin_extract"
 hint = """Implement source plugin extraction capability"""
 test = true
+
+[[exercises]]
+name = "syscall_extract_plugin"
+hint = """Implement an extract plugin that handles system call events. Make sure the tests pass"""
+test = true
