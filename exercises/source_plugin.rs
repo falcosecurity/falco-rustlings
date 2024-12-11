@@ -3,9 +3,9 @@ use falco_plugin::base::Plugin;
 use falco_plugin::event::events::types::PPME_PLUGINEVENT_E;
 use falco_plugin::extract::EventInput;
 use falco_plugin::source::{EventBatch, SourcePlugin, SourcePluginInstance};
-use falco_plugin::static_plugin;
 use falco_plugin::strings::CStringWriter;
 use falco_plugin::tables::TablesInput;
+use falco_plugin::{static_plugin, FailureReason};
 use std::ffi::{CStr, CString};
 use std::io::Write;
 
