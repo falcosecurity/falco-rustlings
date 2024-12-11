@@ -62,6 +62,16 @@ hint = """Implement source plugin extraction capability"""
 test = true
 
 [[exercises]]
+name = "plugin_config"
+test = true
+hint = """
+The plugin configuration format is vastly flexible. It can receive
+unstructured data or payloads in JSON, YAML, TOML, and other popular
+formats. The plugin SDK supports the JSON schema out of the box. For
+more information head to https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/base/struct.Json.html
+"""
+
+[[exercises]]
 name = "syscall_extract_plugin"
 hint = """Implement an extract plugin that handles system call events. Make sure the tests pass"""
 test = true
