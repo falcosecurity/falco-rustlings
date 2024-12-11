@@ -1,4 +1,3 @@
-use falco_plugin::anyhow::Error;
 use falco_plugin::base::Plugin;
 use falco_plugin::static_plugin;
 use falco_plugin::tables::TablesInput;

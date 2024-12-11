@@ -1,4 +1,3 @@
-use falco_plugin::anyhow::Error;
 use falco_plugin::base::Plugin;
 use falco_plugin::static_plugin;
 use falco_plugin::tables::TablesInput;
@@ -25,6 +24,19 @@ struct NoOpPlugin;
 //
 // DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/base/trait.Plugin.html
 impl Plugin for NoOpPlugin {
+    const NAME: &'static CStr = c"noop-plugin";
+
+    const PLUGIN_VERSION: &'static CStr = c"0.0.1";
+
+    const DESCRIPTION: &'static CStr = c"The simplest possible plugin";
+
+    const CONTACT: &'static CStr = c"https://github.com/falcosecurity/plugin-sdk-rs";
+
+    type ConfigType = ();
+
+    fn new(_input: Option<&TablesInput>, _config: Self::ConfigType) -> Result<Self, falco_plugin::anyhow::Error> {
+        Ok(Self)
+    }
     // TODO: add missing items
 }
 
