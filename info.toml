@@ -81,7 +81,7 @@ hint = """Implement an instance type and connect it to your source plugin. Make 
 test = true
 
 [[exercises]]
-name = "source_plugin_yielding_events"
+name = "source_plugin_with_events"
 hint = """Make the source plugin emit a continuous stream of random numbers"""
 test = true
 
