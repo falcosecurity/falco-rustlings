@@ -27,7 +27,7 @@ name = "building_the_sdk_just_a_moment_please"
 # Optional directory name to be provided if you want to organize exercises in directories.
 # If `dir` is specified, the exercise path is `exercises/DIR/NAME.rs`
 # Otherwise, the path is `exercises/NAME.rs`
-# dir = "???"
+dir = "00_setup"
 
 # Rustlings expects the exercise to contain tests and run them.
 # You can optionally disable testing by setting `test` to `false` (the default is `true`).
