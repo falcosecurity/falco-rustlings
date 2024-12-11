@@ -57,6 +57,11 @@ hint = """Make the source plugin emit a continuous stream of random numbers"""
 test = true
 
 [[exercises]]
+name = "async"
+hint = "Implement async events capability"
+test = true
+
+[[exercises]]
 name = "source_plugin_extract"
 hint = """Implement source plugin extraction capability"""
 test = true

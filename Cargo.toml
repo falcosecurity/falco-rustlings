@@ -7,6 +7,8 @@ bin = [
   { name = "source_plugin_01_sol", path = "solutions/source_plugin_01.rs" },
   { name = "source_plugin_yielding_events", path = "exercises/source_plugin_yielding_events.rs" },
   { name = "source_plugin_yielding_events_sol", path = "solutions/source_plugin_yielding_events.rs" },
+  { name = "async", path = "exercises/async.rs" },
+  { name = "async_sol", path = "solutions/async.rs" },
   { name = "source_plugin_extract", path = "exercises/source_plugin_extract.rs" },
   { name = "source_plugin_extract_sol", path = "solutions/source_plugin_extract.rs" },
   { name = "plugin_config", path = "exercises/plugin_config.rs" },
