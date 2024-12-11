@@ -31,7 +31,7 @@ impl Plugin for NoOpPlugin {
     const CONTACT: &'static CStr = c"https://github.com/falcosecurity/plugin-sdk-rs";
     type ConfigType = ();
 
-    fn new(input: Option<&TablesInput>, config: Self::ConfigType) -> Result<Self, Error> {
+    fn new(_input: Option<&TablesInput>, _config: Self::ConfigType) -> Result<Self, Error> {
         Ok(Self)
     }
 }

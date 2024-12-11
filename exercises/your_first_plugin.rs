@@ -1,8 +1,8 @@
-use std::ffi::CStr;
-use falco_plugin::anyhow;
+use falco_plugin::anyhow::Error;
 use falco_plugin::base::Plugin;
 use falco_plugin::static_plugin;
 use falco_plugin::tables::TablesInput;
+use std::ffi::CStr;
 
 //
 // INTRO
