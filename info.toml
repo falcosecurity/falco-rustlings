@@ -96,7 +96,7 @@ hint = """Implement source plugin extraction capability"""
 test = true
 
 [[exercises]]
-name = "plugin_config"
+name = "plugin_configuration"
 test = true
 hint = """
 The plugin configuration format is vastly flexible. It can receive
