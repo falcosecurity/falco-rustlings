@@ -1,4 +1,6 @@
-# Falco Plugin Rust SDK - Rustlings Rustlings 🦀
+# Falco Plugin Rust SDK - Rustlings 🦀
+
+Welcome to the Hatchlings project!
 
 ## Introduction
 
@@ -17,7 +19,8 @@ Follow the official [instructions](https://github.com/rust-lang/rustlings) to in
 
 The exercises are designed to be completed in order, with each one building on concepts from the previous ones. If you get stuck, refer to the resources section for help.
 
-Similar to the core `rustlings` exercises, you will need to search for `TODO` and `todo!()` to discover the areas that need to be changed.
+Similar to the core `rustlings` exercises, you will need to search for `TODO` and `todo!()` to discover the areas that need to be changed,
+you can press `h` to get hints, and you may find a solution ready in the `solutions/` directory.
 
 ## Resources
 |                                     |                                                                       |
