@@ -8,8 +8,19 @@ format_version = 1
 
 # Optional multi-line message to be shown to users when just starting with the exercises.
 welcome_message = """
-Welcome to these Falco Plugin Rust SDK exercises!
-If you're not familiar with Rustlings, we encourage you to check out the main Rustlings repository first.
+Welcome to the Falco Plugin Rust SDK exercises!
+
+These exercises will walk you through the process of developing Falco Plugins using
+the Rust SDK. You may want to open the Rust SDK Documenation
+(https://falcosecurity.github.io/plugin-sdk-rs) in a separate browser window
+as a reference.
+
+Each exercise has a partially complete implementation of a plugin. Your job is to
+identify the missing components and fill them in.
+
+After saving your changes, the framework will build the plugin and run tests that
+verify that your changes correctly implement the exercise.
+
 Just tl;dr:
 1. exercises usually contain some compiler or logic errors
 2. search for `TODO` and `todo!()` in the code
