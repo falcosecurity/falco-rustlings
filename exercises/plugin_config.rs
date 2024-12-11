@@ -1,10 +1,10 @@
-use falco_plugin::anyhow::Error;
+use falco_plugin::anyhow::{anyhow, Error};
 use falco_plugin::base::{Json, Plugin};
-use falco_plugin::event::events::types::PPME_PLUGINEVENT_E;
-use falco_plugin::extract::EventInput;
+use falco_plugin::event::events::types::{EventType, PPME_PLUGINEVENT_E};
+use falco_plugin::extract::{field, EventInput, ExtractFieldInfo, ExtractPlugin, ExtractRequest};
 use falco_plugin::schemars::JsonSchema;
 use falco_plugin::serde::Deserialize;
-use falco_plugin::source::{EventBatch, SourcePlugin, SourcePluginInstance};
+use falco_plugin::source::{EventBatch, PluginEvent, SourcePlugin, SourcePluginInstance};
 use falco_plugin::static_plugin;
 use falco_plugin::strings::CStringWriter;
 use falco_plugin::tables::TablesInput;
@@ -40,6 +40,7 @@ impl Plugin for RandomGenPlugin {
     }
 
     fn set_config(&mut self, _config: Self::ConfigType) -> Result<(), Error> {
+        // TODO: Update the random generator range
         Ok(())
     }
 }
@@ -104,6 +105,43 @@ impl SourcePlugin for RandomGenPlugin {
     }
 }
 
+impl RandomGenPlugin {
+    /// Reads the raw event payload and converts it to u64 value.
+    fn extract_number(&mut self, req: ExtractRequest<Self>) -> Result<u64, Error> {
+        let event = req.event.event()?;
+        let event = event.load::<PluginEvent>()?;
+        let buf = event
+            .params
+            .event_data
+            .ok_or_else(|| anyhow!("Missing event data"))?;
+        Ok(u64::from_le_bytes(buf.try_into()?))
+    }
+}
+
+/// Implement the field extraction capability
+///
+/// This trait exposes a set of items that need to be satisifed
+///
+/// # The set of event types supported by this plugin
+/// If empty, the plugin will get invoked for all event types, otherwise it will only
+/// get invoked for event types from this list.
+///
+/// # The set of event sources supported by this plugin
+/// If empty, the plugin will get invoked for events coming from all sources, otherwise it will
+/// only get invoked for events from sources named in this list.
+///
+/// # The extraction context
+/// # The actual list of extractable fields
+///
+/// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/extract/trait.ExtractPlugin.html
+impl ExtractPlugin for RandomGenPlugin {
+    const EVENT_TYPES: &'static [EventType] = &[];
+    const EVENT_SOURCES: &'static [&'static str] = &[];
+    type ExtractContext = ();
+    const EXTRACT_FIELDS: &'static [ExtractFieldInfo<Self>] = &[field("gen.num", &Self::extract_number)];
+}
+
+
 static_plugin!(MY_SOURCE_PLUGIN = RandomGenPlugin);
 
 fn main() {
@@ -123,7 +161,11 @@ mod tests {
         let mut driver = driver.start_capture(c"", c"").unwrap();
 
         let next = driver.next_event();
-
-        assert!(next.is_ok());
+        let event = next.unwrap();
+        let str = driver
+            .event_field_as_string(c"gen.num", &event)
+            .unwrap()
+            .unwrap();
+        assert!(str.parse::<u64>().unwrap() < 10);
     }
 }

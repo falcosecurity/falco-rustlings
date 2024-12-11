@@ -147,17 +147,14 @@ mod tests {
     fn extract_field() {
         let (mut driver, plugin) =
             init_plugin::<NativeTestDriver>(&super::MY_SOURCE_PLUGIN, c"").unwrap();
-        driver.add_filterchecks(&plugin, c"random_generator");
+        let _ = driver.add_filterchecks(&plugin, c"random_generator");
 
         let mut driver = driver.start_capture(c"", c"").unwrap();
 
         let event = driver.next_event().unwrap();
-        assert!(
-            driver
-                .event_field_as_string(c"gen.num", &event)
-                .unwrap()
-                .unwrap()
-                != ""
-        );
+        assert_ne!(driver
+                       .event_field_as_string(c"gen.num", &event)
+                       .unwrap()
+                       .unwrap(), "");
     }
 }
