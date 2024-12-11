@@ -91,7 +91,7 @@ hint = "Implement async events capability"
 test = true
 
 [[exercises]]
-name = "source_plugin_extract"
+name = "field_extraction"
 hint = """Implement source plugin extraction capability"""
 test = true
 
