@@ -116,6 +116,6 @@ hint = """Expose the parse plugin state as a table and consume it in a separate 
 test = true
 
 [[exercises]]
-name = "syscall_extract_plugin"
+name = "extract_fields_syscall_events"
 hint = """Implement an extract plugin that handles system call events. Make sure the tests pass"""
 test = true
