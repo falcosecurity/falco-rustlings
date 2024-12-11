@@ -116,26 +116,6 @@ impl SourcePlugin for RandomGenPlugin {
     }
 }
 
-impl RandomGenPlugin {
-    /// Reads the raw event payload and converts it to u64 value.
-    fn extract_number(&mut self, req: ExtractRequest<Self>) -> Result<u64, Error> {
-        let event = req.event.event()?;
-        let event = event.load::<PluginEvent>()?;
-        let buf = event
-            .params
-            .event_data
-            .ok_or_else(|| anyhow!("Missing event data"))?;
-        Ok(u64::from_le_bytes(buf.try_into()?))
-    }
-
-    fn extract_count(&mut self, _req: ExtractRequest<Self>, num: u64) -> Result<u64, Error> {
-        // Get the count of occurrences of `num` from `self.histogram`.
-        // If the number isn't there (hasn't been generated even once),
-        // return zero
-        todo!()
-    }
-}
-
 /// Event Parsing Capability
 impl ParsePlugin for RandomGenPlugin {
     const EVENT_TYPES: &'static [EventType] = &[]; // inspect all events...
@@ -155,6 +135,26 @@ impl ParsePlugin for RandomGenPlugin {
         *self.histogram.entry(num).or_insert(0) += 1;
 
         Ok(())
+    }
+}
+
+impl RandomGenPlugin {
+    /// Reads the raw event payload and converts it to u64 value.
+    fn extract_number(&mut self, req: ExtractRequest<Self>) -> Result<u64, Error> {
+        let event = req.event.event()?;
+        let event = event.load::<PluginEvent>()?;
+        let buf = event
+            .params
+            .event_data
+            .ok_or_else(|| anyhow!("Missing event data"))?;
+        Ok(u64::from_le_bytes(buf.try_into()?))
+    }
+
+    fn extract_count(&mut self, _req: ExtractRequest<Self>, num: u64) -> Result<u64, Error> {
+        // Get the count of occurrences of `num` from `self.histogram`.
+        // If the number isn't there (hasn't been generated even once),
+        // return zero
+        todo!()
     }
 }
 

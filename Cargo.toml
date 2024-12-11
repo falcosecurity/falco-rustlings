@@ -15,6 +15,8 @@ bin = [
   { name = "plugin_config_sol", path = "solutions/plugin_config.rs" },
   { name = "event_parsing", path = "exercises/event_parsing.rs" },
   { name = "event_parsing_sol", path = "solutions/event_parsing.rs" },
+  { name = "event_parsing_tables", path = "exercises/event_parsing_tables.rs" },
+  { name = "event_parsing_tables_sol", path = "solutions/event_parsing_tables.rs" },
   { name = "syscall_extract_plugin", path = "exercises/syscall_extract_plugin.rs" },
   { name = "syscall_extract_plugin_sol", path = "solutions/syscall_extract_plugin.rs" },
 ]

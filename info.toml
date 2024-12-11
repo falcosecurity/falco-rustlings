@@ -82,6 +82,11 @@ hint = """Implement event parsing capability"""
 test = true
 
 [[exercises]]
+name = "event_parsing_tables"
+hint = """Expose the parse plugin state as a table and consume it in a separate extract plugin"""
+test = true
+
+[[exercises]]
 name = "syscall_extract_plugin"
 hint = """Implement an extract plugin that handles system call events. Make sure the tests pass"""
 test = true

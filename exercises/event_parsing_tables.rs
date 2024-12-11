@@ -8,11 +8,31 @@ use falco_plugin::serde::Deserialize;
 use falco_plugin::source::{EventBatch, PluginEvent, SourcePlugin, SourcePluginInstance};
 use falco_plugin::static_plugin;
 use falco_plugin::strings::CStringWriter;
-use falco_plugin::tables::TablesInput;
+use falco_plugin::tables::export::{Entry, Public};
+use falco_plugin::tables::import::{Field, TableMetadata};
+use falco_plugin::tables::{export, import, TablesInput};
 use rand::Rng;
-use std::collections::BTreeMap;
 use std::ffi::{CStr, CString};
 use std::io::Write;
+use std::sync::Arc;
+
+// Tables are a mechanism to share data between plugins. A table has a key type
+// (an integer, string or similar) and a value type, which is a struct type.
+//
+// In a table entry struct, fields can be either writable from other plugins,
+// marked as read-only, or completely inaccessible.
+#[derive(Entry)]
+struct HistogramEntry {
+    number: Public<u64>,
+    count: Public<u64>,
+}
+
+/// Add a type alias for the table
+///
+/// We use a longer path, rather than importing the Table type
+/// directly, because we'll also want to *import* this table
+/// from another plugin, and this comes with its own Table type
+type ExportedHistogramTable = export::Table<u64, HistogramEntry>;
 
 struct RandomGenPlugin {
     /// Specifies the range within witch the random
@@ -22,7 +42,7 @@ struct RandomGenPlugin {
 
     /// Keep track of all numbers generated with how
     /// many times each one occurred
-    histogram: BTreeMap<u64, u64>,
+    histogram: Box<ExportedHistogramTable>,
 }
 
 #[derive(JsonSchema, Deserialize)]
@@ -41,10 +61,20 @@ impl Plugin for RandomGenPlugin {
     const CONTACT: &'static CStr = c"https://github.com/falcosecurity/plugin-sdk-rs";
     type ConfigType = Json<Config>;
 
-    fn new(_input: Option<&TablesInput>, Json(config): Self::ConfigType) -> Result<Self, Error> {
+    fn new(input: Option<&TablesInput>, Json(config): Self::ConfigType) -> Result<Self, Error> {
+        let Some(input) = input else {
+            // The plugin is provided with a TablesInput object only if it implements
+            // parsing or extraction capabilities. We know ours does but still need
+            // a runtime check.
+            falco_plugin::anyhow::bail!("Table input not provided");
+        };
+
+        // Register the table with the plugin API, under the name of `random_histogram`.
+        let histogram = input.add_table(ExportedHistogramTable::new(c"random_histogram")?)?;
+
         Ok(Self {
             range: config.range,
-            histogram: BTreeMap::new(),
+            histogram,
         })
     }
 
@@ -131,14 +161,77 @@ impl ParsePlugin for RandomGenPlugin {
 
         let num = u64::from_le_bytes(buf.try_into()?);
 
-        // increase the number of occurrences of `num` in the histogram
-        *self.histogram.entry(num).or_insert(0) += 1;
+        // Increase the number of occurrences of `num` in the histogram
+        //
+        // First, check for an existing entry
+        let entry = self.histogram.lookup(&num);
+        match entry {
+            Some(mut entry) => {
+                // If found, increase the count by 1
+                todo!()
+            }
+            None => {
+                // If not found, create a new entry, set the count to 1, and store it
+                // in the table under the key of `num`
+                let mut entry = self.histogram.create_entry()?;
+                *entry.number = num;
+                todo!();
+                self.histogram.insert(&num, entry);
+            }
+        }
 
         Ok(())
     }
 }
 
-impl RandomGenPlugin {
+// Importing tables involves a bit more work, since there is a metadata struct involved, which
+// describes the fields you want to access. You do not need to specify all the fields existing
+// in the imported table (some tables may be pretty large).
+//
+// We cannot access fields directly (we don't know the in memory layout of the table), but we get
+// generated methods in the Entry type to read/write each field
+type ImportedHistogramTable = import::Table<u64, ImportedHistogramEntry>;
+type ImportedHistogramEntry = import::Entry<Arc<ImportedHistogramMetadata>>;
+
+#[derive(TableMetadata)]
+#[entry_type(ImportedHistogramEntry)]
+struct ImportedHistogramMetadata {
+    number: Field<u64, ImportedHistogramEntry>,
+    count: Field<u64, ImportedHistogramEntry>,
+}
+
+// A second plugin that implements extraction
+struct RandomGenExtractPlugin {
+    histogram: ImportedHistogramTable,
+}
+
+impl Plugin for RandomGenExtractPlugin {
+    const NAME: &'static CStr = c"random_generator_extractor";
+    const PLUGIN_VERSION: &'static CStr = c"0.0.0";
+    const DESCRIPTION: &'static CStr = c"extract values from a stream of random numbers";
+    const CONTACT: &'static CStr = c"https://github.com/falcosecurity/plugin-sdk-rs";
+    type ConfigType = ();
+
+    fn new(input: Option<&TablesInput>, _config: Self::ConfigType) -> Result<Self, Error> {
+        let Some(input) = input else {
+            // The plugin is provided with a TablesInput object only if it implements
+            // parsing or extraction capabilities. We know ours does but still need
+            // a runtime check.
+            falco_plugin::anyhow::bail!("Table input not provided");
+        };
+
+        // Import the `random_histogram` table from the other plugin.
+        let histogram = input.get_table(c"random_histogram")?;
+
+        Ok(Self { histogram })
+    }
+
+    fn set_config(&mut self, _config: Self::ConfigType) -> Result<(), Error> {
+        Ok(())
+    }
+}
+
+impl RandomGenExtractPlugin {
     /// Reads the raw event payload and converts it to u64 value.
     fn extract_number(&mut self, req: ExtractRequest<Self>) -> Result<u64, Error> {
         let event = req.event.event()?;
@@ -150,13 +243,19 @@ impl RandomGenPlugin {
         Ok(u64::from_le_bytes(buf.try_into()?))
     }
 
-    fn extract_count(&mut self, _req: ExtractRequest<Self>, num: u64) -> Result<u64, Error> {
+    /// Return the number of times `num` was generated
+    ///
+    /// Note this method has a different signature: it takes an extra u64 parameter,
+    /// so the rules you build with this field need to include it, e.g. `gen.count[5]`
+    fn extract_count(&mut self, req: ExtractRequest<Self>, num: u64) -> Result<u64, Error> {
+        let r = req.table_reader;
+
         // Get the count of occurrences of `num` from `self.histogram`.
         // If the number isn't there (hasn't been generated even once),
         // return zero
-        match self.histogram.get(&num) {
-            Some(count) => Ok(*count),
-            None => Ok(0),
+        match self.histogram.get_entry(r, &num) {
+            Ok(entry) => Ok(entry.get_count(r)?),
+            Err(_) => Ok(0),
         }
     }
 }
@@ -177,7 +276,7 @@ impl RandomGenPlugin {
 ///
 /// # The extraction context
 /// # The actual list of extractable fields
-impl ExtractPlugin for RandomGenPlugin {
+impl ExtractPlugin for RandomGenExtractPlugin {
     const EVENT_TYPES: &'static [EventType] = &[];
     const EVENT_SOURCES: &'static [&'static str] = &["random_generator"];
     type ExtractContext = ();
@@ -188,6 +287,7 @@ impl ExtractPlugin for RandomGenPlugin {
 }
 
 static_plugin!(MY_SOURCE_PLUGIN = RandomGenPlugin);
+static_plugin!(MY_EXTRACT_PLUGIN = RandomGenExtractPlugin);
 
 fn main() {
     // just needed to build the exercise
@@ -201,9 +301,11 @@ mod tests {
 
     #[test]
     fn extract_field() {
-        let (mut driver, plugin) =
+        let (mut driver, _) =
             init_plugin::<NativeTestDriver>(&super::MY_SOURCE_PLUGIN, c"{\"range\": 10}").unwrap();
-        let _ = driver.add_filterchecks(&plugin, c"random_generator");
+        driver
+            .register_plugin(&super::MY_EXTRACT_PLUGIN, c"")
+            .unwrap();
 
         let mut driver = driver.start_capture(c"", c"").unwrap();
 
