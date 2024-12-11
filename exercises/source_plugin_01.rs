@@ -104,7 +104,7 @@ impl SourcePlugin for MySourcePlugin {
 
 // Now let's make this struct an actual source plugin instance type.
 // For now, we want our plugin to exit immediately without generating any events,
-// by returning Err(FailureReason::Eof)?
+// by returning `Err(FailureReason::Eof)?`
 //
 // DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/source/trait.SourcePluginInstance.html
 impl SourcePluginInstance for MySourceInstance {
