@@ -7,7 +7,14 @@
 format_version = 1
 
 # Optional multi-line message to be shown to users when just starting with the exercises.
-welcome_message = """Welcome to these Falco plugin Rustlings exercises."""
+welcome_message = """
+Welcome to these Falco Plugin Rust SDK exercises!
+If you're not familiar with Rustlings, we encourage you to check out the main Rustlings repository first.
+Just tl;dr:
+1. exercises usually contain some compiler or logic errors
+2. search for `TODO` and `todo!()` in the code
+3. if you're stuck on an exercise, enter `h` to show a hint.
+"""
 
 # Optional multi-line message to be shown to users after finishing all exercises.
 final_message = """We hope that you found the exercises helpful :D"""
