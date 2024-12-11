@@ -21,6 +21,7 @@ The exercises are designed to be completed in order, with each one building on c
 
 Similar to the core `rustlings` exercises, you will need to search for `TODO` and `todo!()` to discover the areas that need to be changed,
 you can press `h` to get hints, and you may find a solution ready in the `solutions/` directory.
+In addition to that, you'll find `DOCS` with pointers to the relevant SDK documentation.
 
 ## Resources
 |                                     |                                                                       |

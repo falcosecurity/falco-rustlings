@@ -9,6 +9,13 @@ use falco_plugin::{static_plugin, FailureReason};
 use std::ffi::{CStr, CString};
 use std::io::Write;
 
+//
+// INTRO
+// The scope of this exercise is to introduce you the concept of source plugins.
+// You may want to check the documentation for Source Plugins at
+// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/source/
+//
+
 // This is the type that represents your first plugin. It does not have any fields,
 // because we do not need to store any state yet.
 struct MySourcePlugin;
@@ -36,6 +43,8 @@ struct MySourceInstance;
 //
 // Source plugins need two separate types: the plugin itself and an instance, responsible
 // for actually generating events (this reflects the underlying API)
+//
+// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/source/trait.SourcePlugin.html
 impl SourcePlugin for MySourcePlugin {
     // The instance type. These must match 1:1 with plugins (each source plugin has its own
     // instance type).
@@ -96,6 +105,8 @@ impl SourcePlugin for MySourcePlugin {
 // Now let's make this struct an actual source plugin instance type.
 // For now, we want our plugin to exit immediately without generating any events,
 // by returning Err(FailureReason::Eof)?
+//
+// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/source/trait.SourcePluginInstance.html
 impl SourcePluginInstance for MySourceInstance {
     // The plugin type
     type Plugin = MySourcePlugin;

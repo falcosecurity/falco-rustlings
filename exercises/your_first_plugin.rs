@@ -4,6 +4,11 @@ use falco_plugin::base::Plugin;
 use falco_plugin::static_plugin;
 use falco_plugin::tables::TablesInput;
 
+//
+// INTRO
+// The scope of this exercise is to introduce you the `Plugin` trait and the `static_plugin` macro.
+//
+
 // This is the type that represents your first plugin. It does not have any fields,
 // because we do not need to store any state yet.
 struct NoOpPlugin;
@@ -18,8 +23,7 @@ struct NoOpPlugin;
 //
 // As our plugin does not support configuration right now, use the empty tuple () as ConfigType
 //
-// You may want to check the documentation for the Plugin trait:
-// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/base/trait.Plugin.html
+// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/base/trait.Plugin.html
 impl Plugin for NoOpPlugin {
     // TODO: add missing items
 }
@@ -34,6 +38,8 @@ impl Plugin for NoOpPlugin {
 // a plugin that cannot do anything (because that's all we know how to do for now!).
 // Such a plugin will cause an error if you try to load it into Falco, so by default
 // the SDK will raise an error if your plugin does not have any capabilities.
+//
+// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/macro.static_plugin.html
 static_plugin!(#[no_capabilities] NO_OP_PLUGIN = NoOpPlugin);
 
 fn main() {

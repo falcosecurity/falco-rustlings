@@ -10,6 +10,15 @@ use rand::Rng;
 use std::ffi::{CStr, CString};
 use std::io::Write;
 
+//
+// INTRO
+// The scope of this exercise is to introduce you the Field Extraction capability.
+// You may want to check the documentation for Field Extraction at
+// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/extract/
+// and the proper section of the Falco documentation at
+// https://falco.org/docs/plugins/architecture/#field-extraction-capability
+//
+
 struct RandomGenPlugin;
 
 /// Plugin metadata
@@ -105,8 +114,6 @@ impl RandomGenPlugin {
 }
 
 /// Implement the field extraction capability
-/// https://falco.org/docs/plugins/architecture/#field-extraction-capability
-/// https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/extract/trait.ExtractPlugin.html
 ///
 /// This trait exposes a set of items that need to be satisifed
 ///
@@ -120,6 +127,8 @@ impl RandomGenPlugin {
 ///
 /// # The extraction context
 /// # The actual list of extractable fields
+///
+/// DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/extract/trait.ExtractPlugin.html
 impl ExtractPlugin for RandomGenPlugin {
     const EVENT_TYPES: &'static [EventType] = &[];
     const EVENT_SOURCES: &'static [&'static str] = &["random_generator"];
