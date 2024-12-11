@@ -17,7 +17,25 @@ Just tl;dr:
 """
 
 # Optional multi-line message to be shown to users after finishing all exercises.
-final_message = """We hope that you found the exercises helpful :D"""
+final_message = """
+ \u001b[0;36m###
+  ###
+ #  ##
+ ###  ##
+   ###  ##
+  #  ###  ##      #####                            ###
+   ##  ##  ###  ###         ###########            ###
+    ###  ##    ##  ##       ###                    ###
+      ###    ##  ###        ###         #######    ###      ######    ######
+           ##  ###  #       ###         ##  ####   ###    ########  ##########
+         ##  ###  ##        ##########       ###   ###   ###       ###     ###
+       ###  ##  ##          ###        #########   ###   ###       ###      ###
+     ###  ##  ###           ###       ###    ###   ###   ###       ###     ####
+   ###  ##      ##          ###       ####   ###   ####  #####   #  ####  ####
+  ##  ##          ###       ###         ########    ####   #######    ######\u001b[0m
+
+You can now create your own Falco plugin in Rust!
+"""
 
 # Repeat this section for every exercise.
 [[exercises]]
