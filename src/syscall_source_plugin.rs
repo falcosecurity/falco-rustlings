@@ -4,7 +4,7 @@ use falco_plugin::event::events::types::{
     PPME_SYSCALL_CLOSE_E, PPME_SYSCALL_CLOSE_X, PPME_SYSCALL_OPEN_X, PPME_SYSCALL_READ_E,
     PPME_SYSCALL_READ_X,
 };
-use falco_plugin::event::events::{Event, EventMetadata, EventToBytes, PayloadToBytes, RawEvent};
+use falco_plugin::event::events::{Event, EventMetadata, EventToBytes, PayloadToBytes};
 use falco_plugin::event::fields::types::{PT_FLAGS32_file_flags, PT_ERRNO, PT_FD, PT_FSPATH};
 use falco_plugin::extract::EventInput;
 use falco_plugin::source::{EventBatch, SourcePlugin, SourcePluginInstance};
@@ -33,7 +33,7 @@ fn build_syscall_events() -> VecDeque<Vec<u8>> {
 
     evts.push_back(event_to_bytes(PPME_SYSCALL_OPEN_X {
         fd: Some(PT_FD(5)),
-        name: Some(PT_FSPATH::new("/etc/passwd\0")),
+        name: Some(PT_FSPATH::new("/etc/passwd")),
         flags: Some(PT_FLAGS32_file_flags::O_RDWR),
         mode: Some(0o644),
         dev: Some(0),
@@ -47,7 +47,7 @@ fn build_syscall_events() -> VecDeque<Vec<u8>> {
 
     evts.push_back(event_to_bytes(PPME_SYSCALL_READ_X {
         res: Some(PT_ERRNO(5)),
-        data: Some(b"hello\0"),
+        data: Some(b"hello"),
     }));
 
     evts.push_back(event_to_bytes(PPME_SYSCALL_CLOSE_E { fd: Some(PT_FD(5)) }));
@@ -103,8 +103,7 @@ impl SourcePluginInstance for SyscallSourcePluginInstance {
     ) -> Result<(), Error> {
         match self.0.pop_front() {
             Some(event) => {
-                let parsed = RawEvent::from(&event).unwrap();
-                batch.add(parsed)?;
+                batch.add(&*event)?;
                 Ok(())
             }
             None => Err(FailureReason::Eof)?,
