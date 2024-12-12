@@ -57,7 +57,7 @@ impl AsyncEventPlugin for AsyncRandomGenPlugin {
     fn start_async(&mut self, handler: AsyncHandler) -> Result<(), Error> {
         // create an async event
         let event = AsyncEvent {
-            plugin_id: Some(0),
+            plugin_id: None,
             name: Some(AsyncRandomGenPlugin::event_name_c_str()),
             data: Some(AsyncRandomGenPlugin::data()),
         };
