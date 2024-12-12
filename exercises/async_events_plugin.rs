@@ -2,8 +2,8 @@ use falco_plugin::anyhow::Error;
 use falco_plugin::async_event::{AsyncEvent, AsyncEventPlugin, AsyncHandler};
 use falco_plugin::base::Plugin;
 use falco_plugin::event::events::{Event, EventMetadata};
-use falco_plugin::tables::TablesInput;
 use falco_plugin::static_plugin;
+use falco_plugin::tables::TablesInput;
 use std::ffi::CStr;
 
 //
@@ -15,19 +15,12 @@ use std::ffi::CStr;
 // https://falco.org/docs/plugins/architecture/#async-events-capability
 //
 
-struct AsyncRandomGenPlugin;
 // Have some static data to check in the test
-impl AsyncRandomGenPlugin {
-    pub const fn event_name_c_str() -> &'static CStr {
-        return c"async";
-    }
-    pub const fn event_name() -> &'static str {
-        return "async";
-    }
-    pub const fn data() -> &'static [u8] {
-        return b"hello world";
-    }
-}
+const TEST_EVENT_NAME_C_STR: &CStr = c"async";
+const TEST_EVENT_NAME: &str = "async";
+const TEST_DATA: &[u8] = b"hello world";
+
+struct AsyncRandomGenPlugin;
 
 impl Plugin for AsyncRandomGenPlugin {
     const NAME: &'static CStr = c"async_random_generator";
@@ -45,7 +38,7 @@ impl Plugin for AsyncRandomGenPlugin {
 // DOCS: https://falcosecurity.github.io/plugin-sdk-rs/falco_plugin/async_event/trait.AsyncEventPlugin.html
 impl AsyncEventPlugin for AsyncRandomGenPlugin {
     // Async plugin has to declare which events they send
-    const ASYNC_EVENTS: &'static [&'static str] = &[AsyncRandomGenPlugin::event_name()];
+    const ASYNC_EVENTS: &'static [&'static str] = &[TEST_EVENT_NAME];
     // Async events can be injected to any kind of source, or to specific ones
     // When empty, attach to all event sources
     const EVENT_SOURCES: &'static [&'static str] = &[];
@@ -85,11 +78,12 @@ fn main() {
 // These are the tests your plugin needs to pass. For now, we have just one: it should
 // successfully load into the test harness (emulating Falco plugin API) and get a valid event
 mod tests {
-    use super::AsyncRandomGenPlugin;
+    use crate::{TEST_DATA, TEST_EVENT_NAME_C_STR};
+
     use exercises::native::NativeTestDriver;
     use exercises::{CapturingTestDriver, TestDriver};
-    use falco_plugin::event::events::RawEvent;
     use falco_plugin::event::events::types::PPME_ASYNCEVENT_E;
+    use falco_plugin::event::events::RawEvent;
 
     #[test]
     fn get_event() {
@@ -116,7 +110,7 @@ mod tests {
         assert!(evt.name.is_some());
         assert!(evt.data.is_some());
         assert_eq!(evt.plugin_id.unwrap(), 0);
-        assert_eq!(evt.name.unwrap(), AsyncRandomGenPlugin::event_name_c_str());
-        assert_eq!(evt.data.unwrap(), AsyncRandomGenPlugin::data());
+        assert_eq!(evt.name.unwrap(), TEST_EVENT_NAME_C_STR);
+        assert_eq!(evt.data.unwrap(), TEST_DATA);
     }
 }
