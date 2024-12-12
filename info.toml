@@ -45,7 +45,12 @@ final_message = """
    ###  ##      ##          ###       ####   ###   ####  #####   #  ####  ####
   ##  ##          ###       ###         ########    ####   #######    ######\u001b[0m
 
-You can now create your own Falco plugin in Rust!
+Congratulations! You can now create your own Falco plugin in Rust!
+
+Where to go next? It's very easy to build your plugin and load it into Falco.
+Don't believe us? We took the code for the sourcing and extract plugin you just worked on
+and can show you that it can be built with a single `cargo` command, then loaded
+and tested with a single `docker` command: https://github.com/madchicken/rand-generator-plugin
 """
 
 # Repeat this section for every exercise.
