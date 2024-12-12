@@ -86,7 +86,7 @@ hint = """Make the source plugin emit a continuous stream of random numbers"""
 test = true
 
 [[exercises]]
-name = "source_plugin_async_events"
+name = "async_events_plugin"
 hint = "Implement async events capability"
 test = true
 
