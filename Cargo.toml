@@ -28,6 +28,6 @@ edition = "2021"
 publish = false
 
 [dependencies]
-falco_plugin = { git = "https://github.com/falcosecurity/plugin-sdk-rs" }
-falco_plugin_runner = { git = "https://github.com/falcosecurity/plugin-sdk-rs" }
+falco_plugin = "0.4.1"
+falco_plugin_runner = "0.4.1"
 rand = "0.8.5"
